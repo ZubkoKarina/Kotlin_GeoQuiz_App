@@ -67,3 +67,9 @@ class MainActivity : AppCompatActivity() {
         ).show()
     }
 }
+
+//During lifecycle, an activity transitions between four states:
+//Created       - onCreate()
+//Started       - onStart() onStop()
+//Resumed       - onResume()
+//Nonexistent   - onDestroy()
