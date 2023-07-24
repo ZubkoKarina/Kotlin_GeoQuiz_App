@@ -25,29 +25,36 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val questionTextResId = questionBank[currentIndex].textResId
-        binding.questionTextView.setText(questionTextResId)
-
         binding.trueButton.setOnClickListener{view: View ->
-            Snackbar.make(
-                binding.trueButton,
-                R.string.correct_toast,
-                Snackbar.LENGTH_SHORT
-            ).show()
+            checkAnswer(true)
         }
 
         binding.falseButton.setOnClickListener{view: View ->
-            Snackbar.make(
-                binding.falseButton,
-                R.string.incorrect_toast,
-                Snackbar.LENGTH_SHORT
-            ).show()
+            checkAnswer(false)
         }
 
         binding.nextButton.setOnClickListener{
             currentIndex = (currentIndex + 1) % questionBank.size
-            val questionTextResId = questionBank[currentIndex].textResId
-            binding.questionTextView.setText(questionTextResId)
+            updateQuestion()
         }
+        updateQuestion()
+    }
+    private fun updateQuestion() {
+        val questionTextResId = questionBank[currentIndex].textResId
+        binding.questionTextView.setText(questionTextResId)
+    }
+
+    private fun checkAnswer(userAnswer: Boolean) {
+        val correctAnswer = questionBank[currentIndex].answer
+        val messageResId = if (userAnswer == correctAnswer) {
+            R.string.correct_snackbart
+        } else {
+            R.string.incorrect_snackbart
+        }
+        Snackbar.make(
+            binding.root,
+            messageResId,
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 }
