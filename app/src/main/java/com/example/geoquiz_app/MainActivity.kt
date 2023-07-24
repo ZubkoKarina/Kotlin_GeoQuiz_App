@@ -1,14 +1,14 @@
 package com.example.geoquiz_app
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.view.View
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import com.example.geoquiz_app.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var trueButton: Button
-    private lateinit var falseButton: Button
+    private lateinit var binding: ActivityMainBinding
 
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
@@ -22,22 +22,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        trueButton = findViewById(R.id.true_button)
-        falseButton = findViewById(R.id.false_button)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        trueButton.setOnClickListener{view: View ->
+        binding.trueButton.setOnClickListener{view: View ->
             Snackbar.make(
-                trueButton,
+                binding.trueButton,
                 R.string.correct_toast,
                 Snackbar.LENGTH_SHORT
             ).show()
         }
 
-        falseButton.setOnClickListener{view: View ->
+        binding.falseButton.setOnClickListener{view: View ->
             Snackbar.make(
-                falseButton,
+                binding.falseButton,
                 R.string.incorrect_toast,
                 Snackbar.LENGTH_SHORT
             ).show()
