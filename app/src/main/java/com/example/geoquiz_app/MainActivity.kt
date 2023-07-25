@@ -3,6 +3,7 @@ package com.example.geoquiz_app
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.geoquiz_app.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
@@ -20,17 +21,22 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_asia, true)
     )
     private var currentIndex = 0
+    private var correctAnswers = 0
+    private var answeredQuestions = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG,  "onCreate(Bundle?) called")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.trueButton.setOnClickListener{view: View ->
             checkAnswer(true)
+            updateButtons()
         }
         binding.falseButton.setOnClickListener{view: View ->
             checkAnswer(false)
+            updateButtons()
         }
         binding.nextButton.setOnClickListener{
             currentIndex = (currentIndex + 1) % questionBank.size
@@ -46,38 +52,34 @@ class MainActivity : AppCompatActivity() {
         }
         updateQuestion()
     }
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart() called")
+
+    private fun updateButtons() {
+        binding.trueButton.isEnabled = !questionBank[currentIndex].isAnswered
+        binding.falseButton.isEnabled = !questionBank[currentIndex].isAnswered
+
+        if (answeredQuestions == questionBank.size) {
+            val score = 100 * correctAnswers / questionBank.size
+            Toast.makeText(this, "Score: $score%", Toast.LENGTH_LONG).show()
+            binding.nextButton.isEnabled = false
+        }
     }
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume() called")
-    }
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause() called")
-    }
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop() called")
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy() called")
-    }
+
     private fun updateQuestion() {
-        binding.trueButton.isEnabled = true
-        binding.falseButton.isEnabled = true
         val questionTextResId = questionBank[currentIndex].textResId
         binding.questionTextView.setText(questionTextResId)
+        updateButtons()
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
-        val correctAnswer = questionBank[currentIndex].answer
+        val question = questionBank[currentIndex]
+        if (question.isAnswered) return
+
+        question.isAnswered = true
+        answeredQuestions++
+
+        val correctAnswer = question.answer
         val messageResId = if (userAnswer == correctAnswer) {
-            binding.trueButton.isEnabled = false
-            binding.falseButton.isEnabled = false
+            correctAnswers++
             R.string.correct_snackbart
         } else {
             R.string.incorrect_snackbart
@@ -89,9 +91,3 @@ class MainActivity : AppCompatActivity() {
         ).show()
     }
 }
-
-//During lifecycle, an activity transitions between four states:
-//Nonexistent - onCreate(...) -> Created -> onStart() -> Started - onResume() -> Resumed
-//           <- onDestory()              <- onStop()            <- onPause()
-//                               Entire lifetime         Visible lifetime        Foreground lifetime
-//                               (instance in memory)    (view visible to user)  (user interactive with this activity)
