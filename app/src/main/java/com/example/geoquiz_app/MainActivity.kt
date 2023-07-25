@@ -67,6 +67,8 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onDestroy() called")
     }
     private fun updateQuestion() {
+        binding.trueButton.isEnabled = true
+        binding.falseButton.isEnabled = true
         val questionTextResId = questionBank[currentIndex].textResId
         binding.questionTextView.setText(questionTextResId)
     }
@@ -74,6 +76,8 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = questionBank[currentIndex].answer
         val messageResId = if (userAnswer == correctAnswer) {
+            binding.trueButton.isEnabled = false
+            binding.falseButton.isEnabled = false
             R.string.correct_snackbart
         } else {
             R.string.incorrect_snackbart
