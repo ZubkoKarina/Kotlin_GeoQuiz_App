@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity() {
     private fun updateButtons() {
         binding.trueButton.isEnabled = !questionBank[currentIndex].isAnswered
         binding.falseButton.isEnabled = !questionBank[currentIndex].isAnswered
-
         if (answeredQuestions == questionBank.size) {
             val score = 100 * correctAnswers / questionBank.size
             Toast.makeText(this, "Score: $score%", Toast.LENGTH_LONG).show()
@@ -73,10 +72,8 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(userAnswer: Boolean) {
         val question = questionBank[currentIndex]
         if (question.isAnswered) return
-
         question.isAnswered = true
         answeredQuestions++
-
         val correctAnswer = question.answer
         val messageResId = if (userAnswer == correctAnswer) {
             correctAnswers++
