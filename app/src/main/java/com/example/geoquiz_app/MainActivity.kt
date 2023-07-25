@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.geoquiz_app.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
-private const val TAG = "MainActivity"
+private const val TAG = "MainActivityK"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
