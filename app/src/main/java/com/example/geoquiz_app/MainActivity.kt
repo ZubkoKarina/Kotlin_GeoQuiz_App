@@ -13,8 +13,6 @@ private const val TAG = "MainActivityK"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var correctAnswers = 0
-    private var answeredQuestions = 0
     private val quizViewModel : QuizViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,12 +23,12 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
         binding.trueButton.setOnClickListener{view: View ->
-            checkAnswer(true)
-            updateButtons()
+            val userAnswer = true
+            checkAnswer(userAnswer)
         }
         binding.falseButton.setOnClickListener{view: View ->
-            checkAnswer(false)
-            updateButtons()
+            val userAnswer = false
+            checkAnswer(userAnswer)
         }
         binding.nextButton.setOnClickListener{
             quizViewModel.moveToNext()
@@ -41,20 +39,10 @@ class MainActivity : AppCompatActivity() {
             updateQuestion()
         }
         binding.questionTextView.setOnClickListener{view: View ->
-            quizViewModel.questionTextView()
+            quizViewModel.moveToNext()
             updateQuestion()
         }
         updateQuestion()
-    }
-
-    private fun updateButtons() {
-        binding.trueButton.isEnabled = !quizViewModel.questionBank[quizViewModel.currentIndex].isAnswered
-        binding.falseButton.isEnabled = !quizViewModel.questionBank[quizViewModel.currentIndex].isAnswered
-        if (answeredQuestions == quizViewModel.questionBank.size) {
-            val score = 100 * correctAnswers / quizViewModel.questionBank.size
-            Toast.makeText(this, "Score: $score%", Toast.LENGTH_LONG).show()
-            binding.nextButton.isEnabled = false
-        }
     }
 
     private fun updateQuestion() {
@@ -63,14 +51,19 @@ class MainActivity : AppCompatActivity() {
         updateButtons()
     }
 
+    private fun updateButtons() {
+        val isEnabled = quizViewModel.isQuestionAnswered
+        binding.trueButton.isEnabled = !isEnabled
+        binding.falseButton.isEnabled = !isEnabled
+        if (quizViewModel.isQuizFinished) {
+            val score = quizViewModel.score
+            Toast.makeText(this, "Score: $score%", Toast.LENGTH_LONG).show()
+            binding.nextButton.isEnabled = false
+        }
+    }
+
     private fun checkAnswer(userAnswer: Boolean) {
-        val question = quizViewModel.questionBank[quizViewModel.currentIndex]
-        if (question.isAnswered) return
-        question.isAnswered = true
-        answeredQuestions++
-        val correctAnswer = quizViewModel.currentQuestionAnswer
-        val messageResId = if (userAnswer == correctAnswer) {
-            correctAnswers++
+        val messageResId = if (quizViewModel.checkAnswer(userAnswer)) {
             R.string.correct_snackbart
         } else {
             R.string.incorrect_snackbart
@@ -80,5 +73,6 @@ class MainActivity : AppCompatActivity() {
             messageResId,
             Snackbar.LENGTH_SHORT
         ).show()
+        updateButtons()
     }
 }
