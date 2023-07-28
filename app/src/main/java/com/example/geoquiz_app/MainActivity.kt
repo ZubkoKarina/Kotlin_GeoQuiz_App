@@ -14,7 +14,6 @@ private const val TAG = "MainActivityK"
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val quizViewModel : QuizViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG,  "onCreate(Bundle?) called")
@@ -44,13 +43,11 @@ class MainActivity : AppCompatActivity() {
         }
         updateQuestion()
     }
-
     private fun updateQuestion() {
         val questionTextResId = quizViewModel.currentQuestionText
         binding.questionTextView.setText(questionTextResId)
         updateButtons()
     }
-
     private fun updateButtons() {
         val isEnabled = quizViewModel.isQuestionAnswered
         binding.trueButton.isEnabled = !isEnabled
@@ -61,7 +58,6 @@ class MainActivity : AppCompatActivity() {
             binding.nextButton.isEnabled = false
         }
     }
-
     private fun checkAnswer(userAnswer: Boolean) {
         val messageResId = if (quizViewModel.checkAnswer(userAnswer)) {
             R.string.correct_snackbart

@@ -1,11 +1,12 @@
 package com.example.geoquiz_app
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
 private const val TAG = "QuizViewModelK"
-
-class QuizViewModel : ViewModel() {
+const val CURRENT_INDEX_KEY = "CURRENT_INDEX_KEY"
+class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -14,7 +15,9 @@ class QuizViewModel : ViewModel() {
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true)
     )
-    private var currentIndex = 0
+    private var currentIndex : Int
+        get() = savedStateHandle.get(CURRENT_INDEX_KEY) ?: 0
+        set(value) = savedStateHandle.set(CURRENT_INDEX_KEY, value)
     private var correctAnswers = 0
     private var answeredQuestions = 0
     val currentQuestionAnswer: Boolean
@@ -31,20 +34,17 @@ class QuizViewModel : ViewModel() {
         } else {
             0
         }
-
     fun moveToNext() {
         currentIndex = (currentIndex + 1) % questionBank.size
     }
-
     fun moveToPrev() {
         currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size
     }
-
     fun checkAnswer(userAnswer: Boolean): Boolean {
         return if (!questionBank[currentIndex].isAnswered) {
-            questionBank[currentIndex].isAnswered = true
-            answeredQuestions++
             if (userAnswer == currentQuestionAnswer) {
+                questionBank[currentIndex].isAnswered = true
+                answeredQuestions++
                 correctAnswers++
                 true
             } else {
