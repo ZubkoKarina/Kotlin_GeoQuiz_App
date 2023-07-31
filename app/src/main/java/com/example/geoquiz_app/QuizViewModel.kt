@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import java.lang.Exception
 
-private const val TAG = "QuizViewModelK"
 const val CURRENT_INDEX_KEY = "CURRENT_INDEX_KEY"
 class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     private val questionBank = listOf(
@@ -36,8 +35,7 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
             0
         }
     fun moveToNext() {
-        Log.d(TAG, "Updating question text", Exception())
-        //currentIndex = (currentIndex + 1) % questionBank.size
+        currentIndex = (currentIndex + 1) % questionBank.size
     }
     fun moveToPrev() {
         currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size
