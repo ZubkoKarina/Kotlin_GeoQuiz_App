@@ -1,12 +1,15 @@
 package com.example.geoquiz_app
 
+import android.app.Application
+import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import java.lang.Exception
 
 const val CURRENT_INDEX_KEY = "CURRENT_INDEX_KEY"
-class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+class QuizViewModel(private val application: Application, private val savedStateHandle: SavedStateHandle) : ViewModel() {
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -41,7 +44,8 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size
     }
     fun cheatQuestion() {
-        //...
+        val intent = Intent(application, CheatActivity::class.java)
+        application.startActivity(intent)
     }
     fun checkAnswer(userAnswer: Boolean): Boolean {
         return if (!questionBank[currentIndex].isAnswered) {
