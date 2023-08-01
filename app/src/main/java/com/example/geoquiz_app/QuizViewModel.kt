@@ -20,6 +20,7 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         set(value) = savedStateHandle.set(CURRENT_INDEX_KEY, value)
     private var correctAnswers = 0
     private var answeredQuestions = 0
+
     val currentQuestionAnswer: Boolean
         get() = questionBank[currentIndex].answer
     val currentQuestionText: Int
@@ -34,11 +35,6 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         } else {
             0
         }
-
-    fun cheatIntent(context: Context): Intent {
-        return Intent(context, CheatActivity::class.java)
-    }
-
     fun moveToNext() {
         currentIndex = (currentIndex + 1) % questionBank.size
     }
@@ -46,17 +42,18 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     fun moveToPrev() {
         currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size
     }
+    fun cheatIntent(context: Context): Intent {
+        val answerIsTrue = currentQuestionAnswer
+        return CheatActivity.newIntent(context, answerIsTrue)
+    }
+
 
     fun checkAnswer(userAnswer: Boolean): Boolean {
-        return if (!questionBank[currentIndex].isAnswered) {
-            if (userAnswer == currentQuestionAnswer) {
-                questionBank[currentIndex].isAnswered = true
-                answeredQuestions++
-                correctAnswers++
-                true
-            } else {
-                false
-            }
+        questionBank[currentIndex].isAnswered = true
+        answeredQuestions++
+        return if (userAnswer == currentQuestionAnswer) {
+            correctAnswers++
+            true
         } else {
             false
         }
