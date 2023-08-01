@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import com.example.geoquiz_app.databinding.ActivityCheatBinding
 
 private const val EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geoquiz.answer_is_true"
@@ -22,7 +24,12 @@ class CheatActivity : AppCompatActivity() {
                 else -> R.string.false_button
             }
             binding.answerTextView.setText(answerText)
+            Handler(Looper.getMainLooper()).postDelayed({
+                finish()
+            }, 1500)
         }
+
+
     }
     companion object {
         fun newIntent(packageContext: Context, answerIsTrue: Boolean): Intent {

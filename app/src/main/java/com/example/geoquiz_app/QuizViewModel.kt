@@ -2,6 +2,7 @@ package com.example.geoquiz_app
 
 import android.content.Context
 import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
@@ -38,7 +39,6 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     fun moveToNext() {
         currentIndex = (currentIndex + 1) % questionBank.size
     }
-
     fun moveToPrev() {
         currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size
     }
@@ -46,7 +46,6 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         val answerIsTrue = currentQuestionAnswer
         return CheatActivity.newIntent(context, answerIsTrue)
     }
-
     fun checkAnswer(userAnswer: Boolean): Boolean {
         questionBank[currentIndex].isAnswered = true
         answeredQuestions++
