@@ -47,7 +47,6 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         return CheatActivity.newIntent(context, answerIsTrue)
     }
 
-
     fun checkAnswer(userAnswer: Boolean): Boolean {
         questionBank[currentIndex].isAnswered = true
         answeredQuestions++
