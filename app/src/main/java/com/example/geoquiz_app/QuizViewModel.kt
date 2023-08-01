@@ -2,6 +2,8 @@ package com.example.geoquiz_app
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
