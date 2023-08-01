@@ -58,4 +58,9 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
             false
         }
     }
+    private var cheatAttemptsRemaining = 3
+    fun canCheat(): Boolean = cheatAttemptsRemaining > 0
+    fun useCheat() {
+        cheatAttemptsRemaining--
+    }
 }

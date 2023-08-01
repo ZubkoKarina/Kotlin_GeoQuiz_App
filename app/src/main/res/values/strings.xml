@@ -16,4 +16,5 @@
     <string name="judgment_toast">Cheating is wrong.</string>
     <string name="next_button">NEXT</string>
     <string name="prew_button">PREW</string>
+    <string name="no_more_cheats">Oops, the clues are gone :( </string>
 </resources>

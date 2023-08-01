@@ -12,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.geoquiz_app.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
-private const val TAG = "MainActivityK"
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val quizViewModel: QuizViewModel by viewModels()
@@ -22,13 +20,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Log.d(TAG, "onCreate(Bundle?) called")
-        Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             blurCheatButton()
         }
-
         binding.trueButton.setOnClickListener {
             val userAnswer = true
             checkAnswer(userAnswer)
@@ -54,8 +48,20 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         updateQuestion()
+        binding.cheatButton.setOnClickListener {
+            if (quizViewModel.canCheat()) {
+                quizViewModel.useCheat()
+                val intent = quizViewModel.cheatIntent(this)
+                startActivity(intent)
+                if (!quizViewModel.canCheat()) {
+                    binding.cheatButton.isEnabled = false
+                    Toast.makeText(this, R.string.no_more_cheats, Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(this, R.string.no_more_cheats, Toast.LENGTH_LONG).show()
+            }
+        }
     }
-
     private fun updateQuestion() {
         val questionTextResId = quizViewModel.currentQuestionText
         binding.questionTextView.setText(questionTextResId)
