@@ -40,6 +40,9 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     fun moveToPrev() {
         currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size
     }
+    fun cheatQuestion() {
+        //...
+    }
     fun checkAnswer(userAnswer: Boolean): Boolean {
         return if (!questionBank[currentIndex].isAnswered) {
             if (userAnswer == currentQuestionAnswer) {

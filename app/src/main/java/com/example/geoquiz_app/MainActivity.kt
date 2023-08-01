@@ -21,11 +21,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
-        binding.trueButton.setOnClickListener{view: View ->
+        binding.trueButton.setOnClickListener{
             val userAnswer = true
             checkAnswer(userAnswer)
         }
-        binding.falseButton.setOnClickListener{view: View ->
+        binding.falseButton.setOnClickListener{
             val userAnswer = false
             checkAnswer(userAnswer)
         }
@@ -37,9 +37,12 @@ class MainActivity : AppCompatActivity() {
             quizViewModel.moveToPrev()
             updateQuestion()
         }
-        binding.questionTextView.setOnClickListener{view: View ->
+        binding.questionTextView.setOnClickListener{
             quizViewModel.moveToNext()
             updateQuestion()
+        }
+        binding.cheatButton.setOnClickListener{
+            quizViewModel.cheatQuestion()
         }
         updateQuestion()
     }
