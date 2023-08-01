@@ -2,6 +2,7 @@ package com.example.geoquiz_app
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -28,8 +29,9 @@ class CheatActivity : AppCompatActivity() {
                 finish()
             }, 1500)
         }
-
-
+        val apiVersionTextView = binding.answerTextViewAPIVersion
+        val apiVersion = Build.VERSION.SDK_INT
+        apiVersionTextView.text = "API Version: $apiVersion"
     }
     companion object {
         fun newIntent(packageContext: Context, answerIsTrue: Boolean): Intent {

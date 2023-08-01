@@ -90,8 +90,8 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     private fun blurCheatButton() {
         val effect = RenderEffect.createBlurEffect(
-            10.0f,
-            10.0f,
+            4.0f,
+            4.0f,
             Shader.TileMode.CLAMP
         )
         binding.cheatButton.setRenderEffect(effect)
