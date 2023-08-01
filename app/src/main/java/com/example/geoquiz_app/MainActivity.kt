@@ -1,5 +1,6 @@
 package com.example.geoquiz_app
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,44 +14,48 @@ private const val TAG = "MainActivityK"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val quizViewModel : QuizViewModel by viewModels()
+    private val quizViewModel: QuizViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG,  "onCreate(Bundle?) called")
+        Log.d(TAG, "onCreate(Bundle?) called")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
-        binding.trueButton.setOnClickListener{
+        binding.trueButton.setOnClickListener {
             val userAnswer = true
             checkAnswer(userAnswer)
         }
-        binding.falseButton.setOnClickListener{
+        binding.falseButton.setOnClickListener {
             val userAnswer = false
             checkAnswer(userAnswer)
         }
-        binding.nextButton.setOnClickListener{
+        binding.nextButton.setOnClickListener {
             quizViewModel.moveToNext()
             updateQuestion()
         }
-        binding.prevButton.setOnClickListener{
+        binding.prevButton.setOnClickListener {
             quizViewModel.moveToPrev()
             updateQuestion()
         }
-        binding.questionTextView.setOnClickListener{
+        binding.questionTextView.setOnClickListener {
             quizViewModel.moveToNext()
             updateQuestion()
         }
-        binding.cheatButton.setOnClickListener{
-            quizViewModel.cheatQuestion()
+        binding.cheatButton.setOnClickListener {
+            val intent = quizViewModel.cheatIntent(this)
+            startActivity(intent)
         }
         updateQuestion()
     }
+
     private fun updateQuestion() {
         val questionTextResId = quizViewModel.currentQuestionText
         binding.questionTextView.setText(questionTextResId)
         updateButtons()
     }
+
     private fun updateButtons() {
         val isEnabled = quizViewModel.isQuestionAnswered
         binding.trueButton.isEnabled = !isEnabled
@@ -61,6 +66,7 @@ class MainActivity : AppCompatActivity() {
             binding.nextButton.isEnabled = false
         }
     }
+
     private fun checkAnswer(userAnswer: Boolean) {
         val messageResId = if (quizViewModel.checkAnswer(userAnswer)) {
             R.string.correct_snackbart

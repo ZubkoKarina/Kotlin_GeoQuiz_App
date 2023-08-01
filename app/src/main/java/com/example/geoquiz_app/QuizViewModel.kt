@@ -1,15 +1,12 @@
 package com.example.geoquiz_app
 
-import android.app.Application
+import android.content.Context
 import android.content.Intent
-import android.util.Log
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import java.lang.Exception
 
 const val CURRENT_INDEX_KEY = "CURRENT_INDEX_KEY"
-class QuizViewModel(private val application: Application, private val savedStateHandle: SavedStateHandle) : ViewModel() {
+class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -18,7 +15,7 @@ class QuizViewModel(private val application: Application, private val savedState
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true)
     )
-    private var currentIndex : Int
+    private var currentIndex: Int
         get() = savedStateHandle.get(CURRENT_INDEX_KEY) ?: 0
         set(value) = savedStateHandle.set(CURRENT_INDEX_KEY, value)
     private var correctAnswers = 0
@@ -37,16 +34,19 @@ class QuizViewModel(private val application: Application, private val savedState
         } else {
             0
         }
+
+    fun cheatIntent(context: Context): Intent {
+        return Intent(context, CheatActivity::class.java)
+    }
+
     fun moveToNext() {
         currentIndex = (currentIndex + 1) % questionBank.size
     }
+
     fun moveToPrev() {
         currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size
     }
-    fun cheatQuestion() {
-        val intent = Intent(application, CheatActivity::class.java)
-        application.startActivity(intent)
-    }
+
     fun checkAnswer(userAnswer: Boolean): Boolean {
         return if (!questionBank[currentIndex].isAnswered) {
             if (userAnswer == currentQuestionAnswer) {
